@@ -1,0 +1,163 @@
+  ✓ viewOnce terdeteksi
+  ✓ tipe = image
+  ✓ caption terbaca
+  ✓ mediaNode tersimpan (untuk retry)
+  ✓ mediaNode bisa di-rebuild jadi WAMessage
+  ✓ mediaKey round-trip utuh (Buffer)
+  ✓ baris tersimpan dengan viewOnce=true
+  ✓ mediaStatus = pending (WhatsApp belum bagi media)
+  ✓ mediaRetries mulai dari 0
+  ✓ preview chat menandai view once
+  ✓ percobaan retry tercatat
+  ✓ counter mediaRetried naik
+  ✓ event message-updated dikirim ke browser
+  ✓ reactionMessage diparse
+  ✓ reaction tersimpan di baris target
+  ✓ reaction TIDAK dibuat jadi pesan baru
+  ✓ counter reactions naik
+  ✓ baileys menerima payload react
+  ✓ reaction kita tersimpan
+  ✓ protocolMessage REVOKE diparse
+  ✓ deletedAt terisi
+  ✓ teks dikosongkan
+  ✓ bukan dibuat sebagai pesan baru
+  ✓ counter revoked naik
+  ✓ quoted terdeteksi
+  ✓ preview quoted = teks aslinya
+  ✓ quoted fromMe=false (dari lawan)
+  ✓ quotedPreview() jalan langsung
+  ✓ baris benar-benar terhapus dari DB
+  ✓ event message-removed dikirim
+  ✓ counters reaksi/revoke/media ada
+  ✓ polling diparse jadi teks + opsi
+  ✓ extra.poll tersimpan
+  ✓ video bulat (ptv) jadi type video
+  ✓ video bulat butuh diunduh
+  ✓ lokasi punya mapsUrl
+  ✓ teks lokasi berisi nama tempat
+  ✓ kontak: nomor diambil dari vcard (waid diprioritaskan)
+  ✓ teks kontak menampilkan nama
+  ✓ produk katalog diparse
+  ✓ acara diparse
+  ✓ tipe tak dikenal menyimpan rawType
+  ✓ editedMessage diekstrak dari messages.update
+  ✓ teks pesan diperbarui
+  ✓ editedAt terisi
+  ✓ counter edited naik
+  ✓ pencarian menemukan pesan (teks terbaru)
+  ✓ pencarian mengembalikan chat terkait
+  ✓ kueri terlalu pendek diabaikan
+  ✓ ekspor memuat data chat + sesi
+  ✓ ekspor memuat pesan berurutan
+  ✓ pesan hasil edit ikut terekspor
+  ✓ authEnabled() mengikuti AUTH_PASSWORD
+  ✓ password benar diterima
+  ✓ password salah ditolak
+  ✓ token sesi bisa diverifikasi
+  ✓ token yang diubah ditolak
+  ✓ cookie header dibaca
+  ✓ rate limit memblokir setelah 6 kali gagal
+  ✓ rate limit bisa direset setelah login sukses
+  ✓ tanpa AUTH_PASSWORD halaman lolos
+  ✓ halaman tanpa login diredirect ke /login
+  ✓ API tanpa login dapat 401 JSON
+  ✓ /login tetap bisa diakses
+  ✓ /api/health tetap terbuka
+  ✓ cookie sah membuka halaman
+  ✓ cookie palsu tetap diblokir
+  ✓ konfigurasi webhook tersimpan
+  ✓ webhook percobaan terkirim
+  ✓ penerima menerima 1 permintaan
+  ✓ tanda tangan HMAC cocok
+  ✓ header event terisi
+  ✓ aturan dibuat
+  ✓ regex tidak valid ditolak
+  ✓ balasan otomatis terkirim ke WhatsApp
+  ✓ hits aturan bertambah
+  ✓ balasan tersimpan sebagai pesan keluar
+  ✓ webhook menerima event pesan masuk + balasan
+  ✓ daftar aturan mengembalikan 1 aturan
+  ✓ aturan bisa dimatikan
+  ✓ aturan bisa dihapus
+  ✓ pesan diteruskan ke chat tujuan
+  ✓ baileys menerima gambar + caption
+  ✓ ada tambahan pesan keluar di chat tujuan
+  ✓ salinan media disimpan ulang
+  ✓ pesan teks diteruskan sebagai teks
+  ✓ kunci VAPID tersedia
+  ✓ kunci VAPID stabil antar pemanggilan
+  ✓ kirim tanpa pelanggan tidak error
+  ✓ laporan perangkat kosong
+  ✓ jumlah langganan = 0
+  ✓ diagnostik: kunci VAPID terinci
+  ✓ diagnostik: sumber kunci terbaca
+  ✓ diagnostik: percobaan tercatat (termasuk pesan masuk)
+  ✓ diagnostik: daftar perangkat kosong
+  ✓ klien baru dihitung tersembunyi
+  ✓ tab terlihat membuat count = 1
+  ✓ deviceId yang terlihat terdeteksi
+  ✓ tab disembunyikan membuat count = 0 lagi
+  ✓ deviceId hilang dari daftar terlihat
+  ✓ klien terputus dibersihkan
+  ✓ perangkat dengan panel terbuka dilewati
+  ✓ langganan uji dibersihkan
+  ✓ halaman pertama berisi 10 pesan terbaru
+  ✓ halaman lama memuat pesan sebelum halaman pertama
+  ✓ mode around memuat pesan acuan
+  ✓ mode around memuat pesan sebelum & sesudah
+  ✓ pencarian dalam satu chat menemukan pesan
+  ✓ filter chat lain tidak mengembalikan hasil
+  ✓ pencarian tanpa filter tetap menemukan
+  ✓ alamat @lid dikenali
+  ✓ nama salinan JID dikenali sebagai placeholder
+  ✓ nama asli berupa angka tetap dihormati
+  ✓ nama teks biasa bukan placeholder
+  ✓ chat @lid tanpa nama tampil sebagai label ramah
+  ✓ label @lid tidak menyerupai nomor negara
+  ✓ nama asli tetap dipakai
+  ✓ chat biasa memakai nomor terformat
+  ✓ subjudul @lid menjelaskan
+  ✓ subjudul grup
+  ✓ chat baru tanpa nama dibiarkan kosong
+  ✓ perbaikan menemukan 1 chat @lid
+  ✓ chat @lid sudah tidak ada
+  ✓ chat bernomor terbentuk dengan riwayat utuh
+  ✓ nama salinan JID tidak diwariskan
+  ✓ jumlah belum dibaca ikut terbawa
+  ✓ perbaikan memakai peta lid→pn
+  ✓ chat dari peta ikut digabung
+  ✓ chat tanpa data tetap dilaporkan belum selesai
+  ✓ kontak dari WhatsApp disimpan
+  ✓ status@broadcast diabaikan
+  ✓ daftar kontak memuat kiriman WhatsApp
+  ✓ nama dari HP jadi nama tampilan
+  ✓ nomor telepon kontak tersimpan
+  ✓ kontak @lid tanpa nama tampil ramah (bukan nomor asing)
+  ✓ belum ada chat untuk kontak baru
+  ✓ cari pakai nama (huruf kecil) menemukan
+  ✓ cari pakai nomor menemukan
+  ✓ kata kunci ngawur tidak menemukan apa pun
+  ✓ pengirim pesan masuk jadi kontak
+  ✓ kontak yang punya chat ditandai
+  ✓ duplikat & nomor tak valid disaring
+  ✓ nomor aktif ditambahkan
+  ✓ nomor tidak terdaftar dilaporkan
+  ✓ nomor 0-awalan dinormalkan ke 62
+  ✓ impor tanpa nomor valid ditolak
+  ✓ kontak bisa dihapus
+  ✓ hapus kontak tak dikenal ditolak
+  ✓ kontak @lid tanpa chat ikut dirapikan
+  ✓ kontak @lid digabung ke nomor telepon
+  ✓ baris kontak @lid sudah hilang
+  ✓ kontak baru tidak membuat chat kosong
+  ✓ kontak tetap tersimpan di buku kontak
+  ✓ nama kontak menempel ke chat yang sudah ada
+  ✓ chat kosong dihapus
+  ✓ chat kosong lain & yang berisi tetap ada
+  ✓ chat bersemat tidak dihapus
+  ✓ chat dengan unread tidak dihapus
+  ✓ chat dengan cuplikan pesan tidak dihapus
+  ✓ chat berisi pesan tidak dihapus
+  ✓ aman dijalankan berkali-kali
+  ✓ chat dibentuk ulang saat ada pesan
+HASIL: 162 lulus, 0 gagal

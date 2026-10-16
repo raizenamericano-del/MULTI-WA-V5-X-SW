@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-16",
+  "baseCommit": "c590ea5fae64ecdab31f55b8edd2d86fdda69f79",
+  "version": "1.8.0",
+  "node": "20.20.2",
+  "cleanNpmCi": "passed including Baileys stream patch",
+  "typecheck": "passed",
+  "productionBuild": "passed",
+  "regressionTests": { "passed": 162, "failed": 0 },
+  "statusTests": { "passed": 14, "failed": 0 },
+  "productionBrowserScenarios": { "passed": 9, "failed": 0, "pageErrors": 0 },
+  "testFixturesOnly": true,
+  "productionAudit": { "high": 4, "critical": 1, "note": "Inherited framework dependencies need major-version security upgrade; see audit report and PANDUAN-STATUS.md" },
+  "notTested": ["live WhatsApp pairing/status/CDN", "Railway deployment and volume", "Docker execution", "physical Android"]
+}

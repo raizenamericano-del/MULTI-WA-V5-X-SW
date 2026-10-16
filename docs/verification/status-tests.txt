@@ -1,0 +1,19 @@
+
+> wa-multi-device-controller@1.8.0 test:status
+> tsx tests/status.test.ts
+
+PASS parse photo, caption and thumbnail
+PASS ignore chat messages, own status, missing sender, expired and future events
+PASS exclude all view-once wrappers
+PASS video and text statuses are parsed without fake media
+PASS duplicate events are idempotent; raw keys never exposed by list
+PASS accounts isolated; invalid paths rejected
+PASS download preserves exact original bytes and cache avoids re-download
+PASS filesystem persistence across store restart
+PASS offline uncached status fails; cached file remains available offline
+PASS network stream errors leave no partial media
+PASS 64 MiB limit enforced while streaming
+PASS expired metadata and media purged
+PASS maximum 100 records per account
+PASS clear removes all status credentials and cached media
+14 status tests passed. Live WhatsApp not tested.

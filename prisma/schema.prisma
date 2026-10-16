@@ -1,0 +1,185 @@
+// Prisma schema for WhatsApp Multi-Device Controller
+// The datasource provider is switched between "sqlite" (local dev) and
+// "postgresql" (Railway / production) automatically by scripts/prepare-db.mjs
+// based on the value of DATABASE_URL.
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model WaSession {
+  id                   String    @id @default(cuid())
+  name                 String
+  phoneNumber          String    @unique
+  status               String    @default("disconnected") // disconnected | connecting | pairing | connected | error
+  pairingCode          String?
+  pairingCodeExpiresAt DateTime?
+  pushName             String?
+  lastError            String?
+  connectedAt          DateTime?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  // --- webhook (integrasi ke sistem lain) ---------------------------------
+  webhookEnabled    Boolean   @default(false)
+  webhookUrl        String?
+  webhookSecret     String?
+  webhookEvents     String    @default("message") // daftar dipisah koma: message,status,autoreply
+  lastWebhookAt     DateTime?
+  lastWebhookStatus String?
+
+  chats    Chat[]
+  messages Message[]
+  rules    AutoReplyRule[]
+
+  @@map("wa_sessions")
+  contacts  Contact[]
+}
+
+/// Aturan balasan otomatis per sesi.
+model AutoReplyRule {
+  id              String    @id @default(cuid())
+  sessionId       String
+  name            String
+  /// contains | exact | startsWith | regex
+  matchType       String    @default("contains")
+  pattern         String
+  reply           String
+  enabled         Boolean   @default(true)
+  applyToGroups   Boolean   @default(false)
+  cooldownSeconds Int       @default(60)
+  hits            Int       @default(0)
+  lastFiredAt     DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  session WaSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId, enabled])
+  @@map("auto_reply_rules")
+}
+
+/// Langganan Web Push (PWA) — satu baris per perangkat/browser.
+model PushSubscription {
+  id            String    @id @default(cuid())
+  endpoint      String    @unique
+  p256dh        String
+  auth          String
+  userAgent     String?
+  deviceId      String?
+  createdAt     DateTime  @default(now())
+  lastSuccessAt DateTime?
+  lastError     String?
+
+  @@index([deviceId])
+  @@map("push_subscriptions")
+}
+
+model Chat {
+  id                 String   @id @default(cuid())
+  sessionId          String
+  jid                String
+  name               String?
+  isGroup            Boolean  @default(false)
+  unreadCount        Int      @default(0)
+  lastMessagePreview String?
+  lastMessageAt      DateTime @default(now())
+  pinned             Boolean  @default(false)
+  archived           Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  session  WaSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  messages Message[]
+
+  @@unique([sessionId, jid])
+  @@index([sessionId, lastMessageAt])
+  @@map("chats")
+}
+
+model Message {
+  id            String   @id @default(cuid())
+  sessionId     String
+  chatId        String
+  waMessageId   String?
+  fromMe        Boolean  @default(false)
+  senderJid     String?
+  senderName    String?
+  type          String   @default("text") // text | image | video | audio | document | sticker | other
+  text          String?
+  mediaPath     String?
+  mediaMime     String?
+  mediaName     String?
+  mediaSize     Int?
+  mediaDuration Int?
+  status        String   @default("sent") // pending | sent | delivered | read | failed
+  timestamp     DateTime @default(now())
+  createdAt     DateTime @default(now())
+
+  // --- view once (foto/video sekali lihat) ---------------------------------
+  viewOnce     Boolean @default(false)
+  // Serialized protobuf media node (BufferJSON) so the file can be re-downloaded
+  // later — WhatsApp often shares view-once media a few seconds after the message.
+  mediaNode    String?
+  mediaStatus  String? // null (no media) | ready | pending | failed
+  mediaRetries Int     @default(0)
+
+  // --- interactions --------------------------------------------------------
+  reactions    String? // JSON map: { "<senderJid>": "emoji" }
+  quotedId     String? // waMessageId of the quoted message
+  quotedText   String? // short preview of the quoted message
+  quotedType   String?
+  quotedFromMe Boolean?
+  deletedAt    DateTime? // set when the message was revoked/deleted
+  editedAt     DateTime? // set when the sender edited the message
+
+  /**
+   * JSON bag for optional render details (gifPlayback, ptv, location, poll, contact…).
+   */
+  extra String?
+
+  /**
+   * Why a media download failed (shown in the UI + diagnostics).
+   */
+  mediaError String?
+
+  session WaSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  chat    Chat      @relation(fields: [chatId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId, waMessageId])
+  @@index([chatId, timestamp])
+  @@map("messages")
+}
+
+/**
+ * Buku kontak hasil sinkronisasi dari nomor yang ditautkan.
+ * Sumber: event `contacts.upsert/update`, sync riwayat (buku alamat HP),
+ * pengirim pesan yang masuk, dan impor manual dari halaman Kontak.
+ */
+model Contact {
+  id           String   @id @default(cuid())
+  sessionId    String
+  jid          String
+  phoneNumber  String?
+  /** Nama yang kamu simpan di HP. */
+  name         String?
+  /** Nama yang dipakai kontak itu sendiri di WhatsApp. */
+  notify       String?
+  verifiedName String?
+  imgUrl       String?
+  /** sync = dari WhatsApp, pesan = dari pengirim chat, manual = diimpor di panel */
+  source       String   @default("sync")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  session WaSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, jid])
+  @@index([sessionId, phoneNumber])
+  @@map("contacts")
+}

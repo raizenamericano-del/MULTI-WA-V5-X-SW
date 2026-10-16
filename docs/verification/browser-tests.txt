@@ -1,0 +1,14 @@
+
+> wa-multi-device-controller@1.8.0 test:browser:status
+> tsx tests/browser-status.ts
+
+PASS list and original files require panel authentication
+PASS authenticated list excludes raw media keys and cross-session file access fails
+PASS original streaming supports exact ranges and rejects invalid ranges
+PASS 390px Android layout, account selector and genuine fixture gallery
+PASS photo/video/text filters and caption search
+PASS photo preview decodes and original download is byte-identical
+PASS real MP4 preview decodes, plays and seeks
+PASS text preview and empty account state are honest
+PASS 360px and desktop layouts, no page errors
+9 production browser scenarios passed. Fixtures only; no live WhatsApp paired.
